@@ -36,8 +36,9 @@ const services = [
 
 export default function ServicesSection() {
   return (
-    <section id="services" className="section-padding bg-mesh relative">
-      <div className="absolute bottom-0 left-0 w-96 h-96 rounded-full bg-accent/8 blur-3xl" />
+    <section id="services" className="section-padding bg-mesh relative overflow-hidden">
+      <div className="absolute bottom-0 left-0 w-96 h-96 rounded-full bg-accent/8 blur-3xl animate-pulse-glow" />
+      <div className="absolute top-20 right-20 w-32 h-32 rounded-full bg-coral/6 blur-xl animate-float" />
 
       <div className="max-w-6xl mx-auto relative z-10">
         <motion.div
@@ -58,33 +59,43 @@ export default function ServicesSection() {
           {services.map((service, i) => (
             <motion.div
               key={service.title}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, y: 30, scale: 0.95 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: i * 0.08 }}
-              className="glass-card rounded-2xl p-6 hover:bg-input transition-all group hover:glow-coral-sm"
+              transition={{ duration: 0.5, delay: i * 0.1, type: "spring", stiffness: 100 }}
+              whileHover={{ y: -8, scale: 1.02 }}
+              className="glass-card rounded-2xl p-6 hover:glow-coral-sm transition-shadow duration-300 cursor-default group"
             >
-              <div className="text-3xl mb-4">{service.icon}</div>
-              <h3 className="text-lg font-bold font-display text-foreground mb-2">{service.title}</h3>
+              <motion.div
+                className="text-3xl mb-4"
+                whileHover={{ scale: 1.3, rotate: 10 }}
+                transition={{ type: "spring", stiffness: 300 }}
+              >
+                {service.icon}
+              </motion.div>
+              <h3 className="text-lg font-bold font-display text-foreground mb-2 group-hover:text-coral transition-colors duration-300">{service.title}</h3>
               <p className="text-sm text-muted-foreground leading-relaxed">{service.desc}</p>
             </motion.div>
           ))}
         </div>
 
         <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
           className="mt-12 flex justify-center"
         >
-          <img
-            src={servicesClipart}
-            alt="Digital marketing tools"
-            loading="lazy"
-            width={800}
-            height={800}
-            className="w-full max-w-xs opacity-70"
-          />
+          <div className="animate-float-slow">
+            <img
+              src={servicesClipart}
+              alt="Digital marketing tools"
+              loading="lazy"
+              width={800}
+              height={800}
+              className="w-full max-w-xs opacity-70"
+            />
+          </div>
         </motion.div>
       </div>
     </section>

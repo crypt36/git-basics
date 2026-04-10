@@ -14,8 +14,9 @@ const skills = [
 
 export default function SkillsSection() {
   return (
-    <section id="skills" className="section-padding relative">
-      <div className="absolute top-0 right-0 w-80 h-80 rounded-full bg-coral/8 blur-3xl" />
+    <section id="skills" className="section-padding relative overflow-hidden">
+      <div className="absolute top-0 right-0 w-80 h-80 rounded-full bg-coral/8 blur-3xl animate-pulse-glow" />
+      <div className="absolute bottom-10 left-10 w-48 h-48 rounded-full bg-accent/6 blur-2xl animate-float-reverse" />
 
       <div className="max-w-6xl mx-auto relative z-10">
         <motion.div
@@ -33,46 +34,63 @@ export default function SkillsSection() {
         </motion.div>
 
         <div className="grid md:grid-cols-2 gap-12 items-center">
-          <div className="glass-card rounded-2xl p-8 space-y-5">
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="glass-card rounded-2xl p-8 space-y-5"
+          >
             {skills.map((skill, i) => (
               <motion.div
                 key={skill.name}
                 initial={{ opacity: 0, x: -20 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: i * 0.05 }}
+                transition={{ duration: 0.4, delay: i * 0.07 }}
               >
                 <div className="flex justify-between mb-1.5">
                   <span className="text-sm font-medium text-foreground">{skill.name}</span>
-                  <span className="text-sm text-muted-foreground">{skill.level}%</span>
+                  <motion.span
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.5 + i * 0.07 }}
+                    className="text-sm text-coral font-semibold"
+                  >
+                    {skill.level}%
+                  </motion.span>
                 </div>
                 <div className="h-2.5 bg-muted rounded-full overflow-hidden">
                   <motion.div
                     initial={{ width: 0 }}
                     whileInView={{ width: `${skill.level}%` }}
                     viewport={{ once: true }}
-                    transition={{ duration: 0.8, delay: i * 0.05 }}
+                    transition={{ duration: 1, delay: i * 0.07, ease: "easeOut" }}
                     className="h-full bg-coral-gradient rounded-full glow-coral-sm"
                   />
                 </div>
               </motion.div>
             ))}
-          </div>
+          </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
+            initial={{ opacity: 0, scale: 0.85, rotate: 5 }}
+            whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
             viewport={{ once: true }}
+            transition={{ duration: 0.6, type: "spring" }}
             className="flex justify-center"
           >
-            <img
-              src={skillsClipart}
-              alt="Achievement and skills illustration"
-              loading="lazy"
-              width={800}
-              height={800}
-              className="w-full max-w-sm"
-            />
+            <div className="animate-float">
+              <img
+                src={skillsClipart}
+                alt="Achievement and skills illustration"
+                loading="lazy"
+                width={800}
+                height={800}
+                className="w-full max-w-sm"
+              />
+            </div>
           </motion.div>
         </div>
       </div>
