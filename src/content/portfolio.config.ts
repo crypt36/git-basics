@@ -6,6 +6,11 @@
 
 import type { PortfolioConfig } from "./portfolio.schema";
 
+const withBase = (path: string) => {
+  const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+  return `${base}${path}`;
+};
+
 export const portfolioConfig: PortfolioConfig = {
   site: {
     name: "Sulove Shrestha",
@@ -65,7 +70,7 @@ export const portfolioConfig: PortfolioConfig = {
         href: "#services",
       },
       image: {
-        src: "/git-basics/images/hero-clipart.png",
+        src: withBase("/images/hero-clipart.png"),
         alt: "Digital marketing professional with social media and analytics icons",
         width: 1024,
         height: 1024,
@@ -81,7 +86,7 @@ export const portfolioConfig: PortfolioConfig = {
         "My focus is on delivering data-driven results that make a real impact — growing audiences, increasing conversions, and building brand authority across all digital channels.",
       ],
       image: {
-        src: "/git-basics/images/sulove-profile.jpeg",
+        src: withBase("/images/sulove-profile.jpeg"),
         alt: "Sulove Shrestha - Senior Digital Marketing Officer",
         width: 500,
         height: 600,
@@ -112,7 +117,7 @@ export const portfolioConfig: PortfolioConfig = {
         { name: "Marketing Automation", level: 82 },
       ],
       image: {
-        src: "/git-basics/images/skills-clipart.png",
+        src: withBase("/images/skills-clipart.png"),
         alt: "Achievement and skills illustration",
         width: 800,
         height: 800,
@@ -158,7 +163,7 @@ export const portfolioConfig: PortfolioConfig = {
         },
       ],
       image: {
-        src: "/git-basics/images/services-clipart.png",
+        src: withBase("/images/services-clipart.png"),
         alt: "Digital marketing tools",
         width: 800,
         height: 800,
@@ -214,7 +219,7 @@ export const portfolioConfig: PortfolioConfig = {
         { icon: "🔗", label: "LinkedIn", value: "linkedin.com/in/suloveshrestha", href: "https://linkedin.com/in/suloveshrestha" },
       ],
       image: {
-        src: "/git-basics/images/contact-clipart.png",
+        src: withBase("/images/contact-clipart.png"),
         alt: "Contact and communication illustration",
         width: 800,
         height: 800,
