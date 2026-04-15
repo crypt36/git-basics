@@ -39,46 +39,14 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Build site
-        run: pnpm build -- --base=/git-basics/
+        env:
+          SITE_BASE_PATH: /${{ github.event.repository.name }}/
+        run: pnpm build
 
       - name: Generate index.html for Pages
-        run: |
-          set -euo pipefail
-          mkdir -p dist/client
-          CSS_FILE=$(ls dist/client/assets/styles-*.css | head -n 1)
-          JS_ENTRY=$(grep -rl "hydrateRoot(" dist/client/assets/index-*.js | head -n 1)
-          if [ -z "${CSS_FILE:-}" ] || [ -z "${JS_ENTRY:-}" ]; then
-            echo "Could not find built CSS/JS entry files in dist/client/assets"
-            exit 1
-          fi
-          # TanStack Start hardcodes runtime basepath for server output.
-          # Rewrite it for GitHub Pages project-site path.
-          perl -0pi -e 's/basepath:"",serializationAdapters/basepath:"\/git-basics\/",serializationAdapters/g; s/basepath:"\/",scrollRestoration/basepath:"\/git-basics\/",scrollRestoration/g' "$JS_ENTRY"
-          # In static hosting, this bootstrap call can throw invariant errors.
-          # Remove it so the client runs as a plain SPA on GitHub Pages.
-          perl -0pi -e 's/a\.stores\.matchesId\.get\(\)\.length\|\|await Ux\(a\),a/a/g' "$JS_ENTRY"
-          CSS_BASENAME=$(basename "$CSS_FILE")
-          JS_BASENAME=$(basename "$JS_ENTRY")
-          BUILD_ID="${GITHUB_SHA:-$(date +%s)}"
-          cat > dist/client/index.html <<EOF
-          <!doctype html>
-          <html lang="en">
-            <head>
-              <meta charset="UTF-8" />
-              <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-              <base href="/git-basics/" />
-              <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-              <meta http-equiv="Pragma" content="no-cache" />
-              <meta http-equiv="Expires" content="0" />
-              <title>Portfolio</title>
-              <link rel="stylesheet" href="/git-basics/assets/${CSS_BASENAME}?v=${BUILD_ID}" />
-            </head>
-            <body>
-              <div id="root"></div>
-              <script type="module" src="/git-basics/assets/${JS_BASENAME}?v=${BUILD_ID}"></script>
-            </body>
-          </html>
-          EOF
+        env:
+          SITE_BASE_PATH: /${{ github.event.repository.name }}/
+        run: node scripts/generate-client-index.mjs
 
       - name: Add SPA fallback
         run: cp dist/client/index.html dist/client/404.html
