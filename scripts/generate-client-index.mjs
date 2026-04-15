@@ -1,4 +1,4 @@
-import { copyFileSync, readdirSync, writeFileSync } from "node:fs";
+import { copyFileSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
 const clientDir = join(process.cwd(), "dist", "client");
@@ -8,7 +8,28 @@ const assetFiles = readdirSync(assetsDir);
 const cssFile = assetFiles.find((name) => /^styles-.*\.css$/.test(name));
 
 const jsCandidates = assetFiles.filter((name) => /^index-.*\.js$/.test(name));
-const jsFile = jsCandidates.find((name) => name.length > 0);
+
+function scoreJsCandidate(name) {
+  const fullPath = join(assetsDir, name);
+  const source = readFileSync(fullPath, "utf8");
+  let score = source.length;
+
+  // Prefer the real bootstrap entry (hydrateRoot/createRoot).
+  if (source.includes("hydrateRoot") || source.includes("createRoot(")) {
+    score += 10_000;
+  }
+
+  // De-prioritize route/component split chunks exported as `component`.
+  if (/export\{[^}]*\sas\scomponent\}/.test(source)) {
+    score -= 10_000;
+  }
+
+  return score;
+}
+
+const jsFile = jsCandidates
+  .map((name) => ({ name, score: scoreJsCandidate(name) }))
+  .sort((a, b) => b.score - a.score)[0]?.name;
 
 if (!cssFile || !jsFile) {
   throw new Error("Could not find generated CSS/JS entry in dist/client/assets");
@@ -23,11 +44,11 @@ const html = `<!doctype html>
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
     <title>Portfolio</title>
-    <link rel="stylesheet" href="/assets/${cssFile}" />
+    <link rel="stylesheet" href="assets/${cssFile}" />
   </head>
   <body>
     <div id="root"></div>
-    <script type="module" src="/assets/${jsFile}"></script>
+    <script type="module" src="assets/${jsFile}"></script>
   </body>
 </html>
 `;
