@@ -51,6 +51,19 @@ export const portfolioConfig: PortfolioConfig = {
   },
   theme: {
     mode: "light",
+    colors: {
+      // Edit values to re-theme the site globally. Keys map to CSS variables in src/styles.css.
+      background: "oklch(0.97 0.005 260)",
+      foreground: "oklch(0.18 0.04 260)",
+      primary: "oklch(0.18 0.04 260)",
+      "primary-foreground": "oklch(0.97 0.005 260)",
+      accent: "oklch(0.63 0.22 30)",
+      "accent-foreground": "oklch(1 0 0)",
+      coral: "oklch(0.63 0.22 30)",
+      "coral-foreground": "oklch(1 0 0)",
+      navy: "oklch(0.18 0.04 260)",
+      "navy-foreground": "oklch(0.97 0.005 260)",
+    },
   },
   blocks: [
     {

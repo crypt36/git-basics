@@ -33,6 +33,14 @@ const SocialLinkSchema = z.object({
   href: z.string().min(1),
 });
 
+const ThemeColorsSchema = z.record(
+  z
+    .string()
+    .min(1, "Theme color key is required")
+    .regex(/^--?[a-z0-9-]+$/i, "Use CSS variable-like keys, e.g. background or --primary"),
+  z.string().min(1, "Theme color value is required"),
+);
+
 const HeroBlockSchema = z.object({
   id: z.string().min(1),
   type: z.literal("hero"),
@@ -198,6 +206,7 @@ export const PortfolioConfigSchema = z.object({
   theme: z
     .object({
       mode: z.enum(["light"]).default("light"),
+      colors: ThemeColorsSchema.optional(),
     })
     .optional(),
   blocks: z.array(BlockConfigSchema).min(1),

@@ -36,6 +36,18 @@ export const portfolioExample: PortfolioConfig = {
   },
   theme: {
     mode: "light",
+    colors: {
+      background: "oklch(0.97 0.005 260)",
+      foreground: "oklch(0.18 0.04 260)",
+      primary: "oklch(0.18 0.04 260)",
+      "primary-foreground": "oklch(0.97 0.005 260)",
+      accent: "oklch(0.63 0.22 30)",
+      "accent-foreground": "oklch(1 0 0)",
+      coral: "oklch(0.63 0.22 30)",
+      "coral-foreground": "oklch(1 0 0)",
+      navy: "oklch(0.18 0.04 260)",
+      "navy-foreground": "oklch(0.97 0.005 260)",
+    },
   },
   blocks: [
     {

@@ -6,7 +6,34 @@ import {
   createRootRoute,
 } from "@tanstack/react-router";
 
+import { validatePortfolioConfig } from "@/content/portfolio";
+
 import appCss from "../styles.css?url";
+
+function buildThemeStyle(): React.CSSProperties | undefined {
+  const parsed = validatePortfolioConfig();
+
+  if (!parsed.ok) {
+    return undefined;
+  }
+
+  const colors = parsed.data.theme?.colors;
+  if (!colors) {
+    return undefined;
+  }
+
+  const entries = Object.entries(colors)
+    .filter(([key, value]) => key.trim().length > 0 && value.trim().length > 0)
+    .map(([key, value]) => [key.startsWith("--") ? key : `--${key}`, value.trim()] as const);
+
+  if (entries.length === 0) {
+    return undefined;
+  }
+
+  return Object.fromEntries(entries) as React.CSSProperties;
+}
+
+const themeStyle = buildThemeStyle();
 
 function NotFoundComponent() {
   return (
@@ -54,7 +81,7 @@ function RootShell({ children }: { children: React.ReactNode }) {
       <head>
         <HeadContent />
       </head>
-      <body>
+      <body style={themeStyle}>
         {children}
         <Scripts />
       </body>
