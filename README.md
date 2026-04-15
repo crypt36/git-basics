@@ -1,5 +1,4 @@
 # Modular No-Code Portfolio Template
-
 This project is set up for teaching beginners. Students should mostly edit one file: `src/content/portfolio.config.ts`.
 
 ## Student Workflow (Edit Only Here)
